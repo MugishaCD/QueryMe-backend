@@ -38,7 +38,6 @@ public class AuthService {
     JwtUtils jwtUtils;
 
     public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
-        // Authenticate by email (passed as username in LoginRequest)
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
@@ -63,7 +62,6 @@ public class AuthService {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        // Map multiple role strings to a single role (last one wins if multiple provided, or default to STUDENT)
         UserTypes finalRole = UserTypes.STUDENT;
         if (signUpRequest.getRoles() != null && !signUpRequest.getRoles().isEmpty()) {
             for (String r : signUpRequest.getRoles()) {
@@ -80,7 +78,6 @@ public class AuthService {
             }
         }
 
-        // Create new user's account
         User user = User.builder()
                 .email(signUpRequest.getEmail())
                 .passwordHash(encoder.encode(signUpRequest.getPassword()))
